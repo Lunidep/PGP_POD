@@ -1,6 +1,3 @@
-#!/usr/bin/python3
-# -*- coding: utf-8
-
 import sys
 import struct
 from PIL import Image
@@ -19,7 +16,7 @@ pal = [
 	(32, 178, 170),	(0, 139, 139),		(0, 128, 128)
 ]
 
-def to_img_alfa(src, dst = None):
+def to_img_alfa(src, dst = False):
 	fin = open(src, 'rb')
 	(w, h) = struct.unpack('hi', fin.read(8))
 	buff = ctypes.create_string_buffer(4 * w * h)
