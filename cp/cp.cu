@@ -268,15 +268,15 @@ void addSceneMeshs(vec3 a, vec3 b, vec3 c, vec3 d, uchar4 color, mesh* meshs, in
     meshs[offset + 1] = mesh(a, c, d, color);
 }
 
-void addOctahedronMeshs(vec3 center, uchar4 color, double r, mesh* meshs, int offset) {
-    double a = r * sqrt(2.0);
+void addOctahedronMeshs(vec3 center, uchar4 color, double radius, mesh* meshs, int offset) {
+    double a = radius * sqrt(2.0);
     vec3 points[] = {
-        vec3(center.x, center.y - r, center.z),
-        vec3(center.x - r, center.y, center.z),
-        vec3(center.x, center.y + r, center.z),
-        vec3(center.x + r, center.y, center.z),
-        vec3(center.x, center.y, center.z - r),
-        vec3(center.x, center.y, center.z + r),
+        vec3(center.x, center.y - radius, center.z),
+        vec3(center.x - radius, center.y, center.z),
+        vec3(center.x, center.y + radius, center.z),
+        vec3(center.x + radius, center.y, center.z),
+        vec3(center.x, center.y, center.z - radius),
+        vec3(center.x, center.y, center.z + radius),
     };
 
     meshs[offset] = mesh(points[0], points[1], points[4], color);
@@ -289,8 +289,8 @@ void addOctahedronMeshs(vec3 center, uchar4 color, double r, mesh* meshs, int of
     meshs[offset + 7] = mesh(points[3], points[5], points[0], color);
 }
 
-void addHexahedronMeshs(vec3 center, uchar4 color, double r, mesh* meshs, int offset) {
-    double a = 2 * r / sqrt(3);
+void addHexahedronMeshs(vec3 center, uchar4 color, double radius, mesh* meshs, int offset) {
+    double a = 2 * radius / sqrt(3);
     vec3 v = vec3(center.x - a / 2, center.y - a / 2, center.z - a / 2);
     vec3 points[] = {
         vec3(v.x, v.y, v.z),
@@ -317,7 +317,7 @@ void addHexahedronMeshs(vec3 center, uchar4 color, double r, mesh* meshs, int of
     meshs[offset + 11] = mesh(points[4], points[7], points[6], color);
 }
 
-void addDodecahedronMeshs(vec3 center, uchar4 color, double r, mesh* meshs, int offset) {
+void addDodecahedronMeshs(vec3 center, uchar4 color, double radius, mesh* meshs, int offset) {
     double a = (1 + sqrt(5)) / 2;
     double b = 1 / a;
     vec3 points[] = {
@@ -328,9 +328,9 @@ void addDodecahedronMeshs(vec3 center, uchar4 color, double r, mesh* meshs, int 
     };
 
     for (auto& v: points) {
-        v.x = v.x * r / sqrt(3) + center.x;
-        v.y = v.y * r / sqrt(3) + center.y;
-        v.z = v.z * r / sqrt(3) + center.z;
+        v.x = v.x * radius / sqrt(3) + center.x;
+        v.y = v.y * radius / sqrt(3) + center.y;
+        v.z = v.z * radius / sqrt(3) + center.z;
     }
 
     meshs[offset] = mesh(points[4], points[0], points[6], color);
@@ -372,24 +372,23 @@ void addDodecahedronMeshs(vec3 center, uchar4 color, double r, mesh* meshs, int 
 }
 
 void dafaultInfo() {
-    cout << "100" << endl;
+    cout << "123" << endl;
     cout << "res/%d.data" << endl;
-    cout << "600 600 120" << endl << endl;
+    cout << "640 480 120" << endl << endl;
 
-    cout << "7.0 3.0 0.0     2.0 1.0     2.0 6.0 1.0     0.0 0.0" << endl;
-    cout << "2.0 0.0 0.0     0.5 0.1     1.0 4.0 1.0     0.0 0.0" << endl << endl;
+    cout << "6.0 2.5 0.0     2.0 1.5     2.5 6.0 1.5     0.0 0.0" << endl;
+    cout << "1.5 0.0 0.0     0.5 0.1     1.0 4.5 1.0     0.0 0.0" << endl << endl;
 
-    cout << "3.0 3.0 0.5    0.765 0.576 1.0     1.0" << endl;
-    cout << "0.0 0.0 0.0     0.98 0.576 1.0     1.75" << endl;
-    cout << "-3.0 -3.0 0.0     0.576 0.91 0.467     1.5" << endl << endl;
+    cout << "-0.5 0.0 2.0     1.0 0.1 0.1     1.75" << endl;
+    cout << "0.0 2.8 0.75    0.1 0.1 1.0     1.75" << endl;
+    cout << "0.0 -2.8 0.5     0.1 1.0 0.1     1.5" << endl << endl;
 
-    cout << "-5.0 -5.0 -1.0     -5.0 5.0 -1.0    5.0 5.0 -1.0    5.0 -5.0 -1.0   0.576 1.0 0.965" << endl << endl;
+    cout << "-5.0 -5.0 -1.0     -5.0 5.0 -1.0    5.0 5.0 -1.0    5.0 -5.0 -1.0   0.576 0.91 0.467" << endl << endl;
 
-    cout << "-10.0 0.0 15.0     0.3 0.2 0.1" << endl << endl;
+    cout << "-10.0 -10.0 15.0     0.3 0.2 0.1" << endl << endl;
 
     cout << "4" << endl;
 }
-
 
 void readCameraParameters(int& framesNum, char* outputPath, int& w, int& h, double& fieldOfView,
                           double& camRadius0, double& camHeight0, double& camRot0, double& camRadiusChange, double& camHeightChange,
@@ -426,10 +425,10 @@ void readFloorParameters(double& floorV1X, double& floorV1Y, double& floorV1Z,
                          double& floorV2X, double& floorV2Y, double& floorV2Z,
                          double& floorV3X, double& floorV3Y, double& floorV3Z,
                          double& floorV4X, double& floorV4Y, double& floorV4Z,
-                         double& floor_color_x, double& floorColorG, double& floorColorB) {
+                         double& floorColorR, double& floorColorG, double& floorColorB) {
     cin >> floorV1X >> floorV1Y >> floorV1Z >> floorV2X >> floorV2Y >> floorV2Z;
     cin >> floorV3X >> floorV3Y >> floorV3Z >> floorV4X >> floorV4Y >> floorV4Z;
-    cin >> floor_color_x >> floorColorG >> floorColorB;
+    cin >> floorColorR >> floorColorG >> floorColorB;
 }
 
 void readLightParameters(double& lightPosX, double& lightPosY, double& lightPosZ,
@@ -447,7 +446,7 @@ void initializeMeshs(mesh* meshs,
                         double& floorV2X, double& floorV2Y, double& floorV2Z,
                         double& floorV3X, double& floorV3Y, double& floorV3Z,
                         double& floorV4X, double& floorV4Y, double& floorV4Z,
-                        double& floor_color_x, double& floorColorG, double& floorColorB,
+                        double& floorColorR, double& floorColorG, double& floorColorB,
                         double& octahedronCenterX, double& octahedronCenterY, double& octahedronCenterZ,
                         double& octahedronColorR, double& octahedronColorG, double& octahedronColorB, double& octahedronRadius,
                         double& hexahedronCenterX, double& hexahedronCenterY, double& hexahedronCenterZ,
@@ -459,7 +458,7 @@ void initializeMeshs(mesh* meshs,
         vec3(floorV2X, floorV2Y, floorV2Z),
         vec3(floorV3X, floorV3Y, floorV3Z),
         vec3(floorV4X, floorV4Y, floorV4Z),
-        make_uchar4(floor_color_x * 255, floorColorG * 255, floorColorB * 255, 255),
+        make_uchar4(floorColorR * 255, floorColorG * 255, floorColorB * 255, 255),
         meshs, 0
     );
     addOctahedronMeshs(
@@ -594,7 +593,7 @@ int main(int argc, char* argv[]) {
     double dodecahedronCenterX, dodecahedronCenterY, dodecahedronCenterZ, dodecahedronColorR, dodecahedronColorG, dodecahedronColorB, dodecahedronRadius;
     double floorV1X, floorV1Y, floorV1Z, floorV2X, floorV2Y, floorV2Z;
     double floorV3X, floorV3Y, floorV3Z, floorV4X, floorV4Y, floorV4Z;
-    double floor_color_x, floorColorG, floorColorB;
+    double floorColorR, floorColorG, floorColorB;
     double lightPosX, lightPosY, lightPosZ, lightColorR, lightColorG, lightColorB;
     double sqrtRaysPerPixel;
 
@@ -605,7 +604,7 @@ int main(int argc, char* argv[]) {
     readDodecahedronParameters(dodecahedronCenterX, dodecahedronCenterY, dodecahedronCenterZ, dodecahedronColorR, dodecahedronColorG, dodecahedronColorB, dodecahedronRadius);
     readFloorParameters(floorV1X, floorV1Y, floorV1Z, floorV2X, floorV2Y, floorV2Z,
                         floorV3X, floorV3Y, floorV3Z, floorV4X, floorV4Y, floorV4Z,
-                        floor_color_x, floorColorG, floorColorB);
+                        floorColorR, floorColorG, floorColorB);
     readLightParameters(lightPosX, lightPosY, lightPosZ, lightColorR, lightColorG, lightColorB);
     readSSAAParameters(sqrtRaysPerPixel);
 
@@ -617,11 +616,11 @@ int main(int argc, char* argv[]) {
     uchar4* devData;
     uchar4* devSsaaResData;
     mesh* devMeshs;
-    mesh meshs[58];
+    mesh meshs[100];
     initializeMeshs(meshs, 
                         floorV1X, floorV1Y, floorV1Z, floorV2X, floorV2Y, floorV2Z,
                         floorV3X, floorV3Y, floorV3Z, floorV4X, floorV4Y, floorV4Z,
-                        floor_color_x, floorColorG, floorColorB, 
+                        floorColorR, floorColorG, floorColorB, 
                         octahedronCenterX, octahedronCenterY, octahedronCenterZ, octahedronColorR, octahedronColorG, octahedronColorB, octahedronRadius,
                         hexahedronCenterX, hexahedronCenterY, hexahedronCenterZ, hexahedronColorR, hexahedronColorG, hexahedronColorB, hexahedronSide,
                         dodecahedronCenterX, dodecahedronCenterY, dodecahedronCenterZ, dodecahedronColorR, dodecahedronColorG, dodecahedronColorB, dodecahedronRadius);
